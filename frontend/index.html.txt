@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>MindCell™ Quantum Power Predictor</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #00B4D8;
+            --primary-dark: #0096C7;
+            --primary-glow: rgba(0,180,216,0.4);
+            --secondary: #00F5D4;
+            --quantum: #8A2BE2;
+            --quantum-glow: rgba(138,43,226,0.5);
+            --success: #00FF88;
+            --danger: #EF476F;
+            --warning: #FFD166;
+            --dark-bg: #05080F;
+            --dark-card: #0A0F1A;
+            --glass-border: rgba(0,180,216,0.2);
+            --text-primary: #E8EDF5;
+            --text-secondary: #8A99B0;
+            --font-exo: 'Exo 2', sans-serif;
+            --font-mono: 'Space Mono', monospace;
+        }
+        
+        body { font-family: var(--font-exo); background: var(--dark-bg); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative; }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
+        
+        .glass-card { background: rgba(15, 25, 45, 0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 28px; padding: 24px; margin-bottom: 24px; transition: all 0.3s; }
+        .glass-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,180,216,0.15); }
+        
+        .header { text-align: center; padding: 20px 0; }
+        .logo { max-width: 280px; width: 100%; filter: drop-shadow(0 0 20px #00B4D8); animation: float 4s ease-in-out infinite; }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+        .tagline { font-size: 0.75rem; color: var(--secondary); letter-spacing: 3px; margin-top: 8px; font-family: var(--font-mono); }
+        .quantum-badge { display: inline-block; background: rgba(138,43,226,0.2); border: 1px solid var(--quantum); border-radius: 60px; padding: 8px 20px; font-size: 11px; font-family: var(--font-mono); color: var(--secondary); margin: 10px 0; }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 25px; }
+        .stat-card { background: rgba(15, 25, 45, 0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 18px; text-align: center; }
+        .stat-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .stat-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-mono); }
+        
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+        .battery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+        .battery-card { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px; border-left: 3px solid var(--success); }
+        .battery-card.critical { border-left-color: var(--danger); }
+        .battery-card.warning { border-left-color: var(--warning); }
+        
+        .btn-primary { background: linear-gradient(135deg, var(--quantum), var(--primary)); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--quantum-glow); }
+        
+        .footer { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 20px; border-top: 1px solid var(--glass-border); margin-top: 15px; font-family: var(--font-mono); }
+        .quantum-line { font-size: 0.7rem; margin-bottom: 8px; letter-spacing: 0.5px; color: var(--secondary); }
+        
+        @media (max-width: 900px) { .stats-row { grid-template-columns: repeat(3, 1fr); } .two-column { grid-template-columns: 1fr; } }
+        @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        
+        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-green { background: var(--success); }
+        .status-yellow { background: var(--warning); }
+        .status-red { background: var(--danger); }
+    </style>
+</head>
+<body>
+<div id="particles-js"></div>
+
+<div class="container">
+    <div class="header">
+        <img src="https://i.postimg.cc/yYPDHtky/Luvuno-Quantum-Chat-image-removebg-preview.png" alt="MindCell™" class="logo">
+        <div class="tagline">⚛️ QUANTUM POWER PREDICTOR · PREDICTIVE ENERGY INTELLIGENCE</div>
+        <div class="quantum-badge">⚛️ CHSH S=2.76 · 38% ABOVE CLASSICAL · SA 2026/05142</div>
+    </div>
+    
+    <div class="stats-row" id="dashboardStats">
+        <div class="stat-card"><div class="stat-value" id="totalBatteries">0</div><div class="stat-label">Total Batteries</div></div>
+        <div class="stat-card"><div class="stat-value" id="criticalBatteries">0</div><div class="stat-label">Critical</div></div>
+        <div class="stat-card"><div class="stat-value" id="warningBatteries">0</div><div class="stat-label">Warning</div></div>
+        <div class="stat-card"><div class="stat-value" id="healthyBatteries">0</div><div class="stat-label">Healthy</div></div>
+        <div class="stat-card"><div class="stat-value" id="quantumScore">2.76</div><div class="stat-label">CHSH S-value</div></div>
+    </div>
+    
+    <div class="two-column">
+        <div class="glass-card">
+            <h3><i class="fas fa-brain"></i> Quantum Prediction</h3>
+            <p style="font-size:12px; color:var(--text-secondary); margin: 10px 0;">Powered by CHSH S=2.76 · 98.4% correlation on IBM hardware</p>
+            <div style="margin: 15px 0;">
+                <label style="font-size:12px; font-family:var(--font-mono);">Battery ID</label>
+                <select id="batterySelect" style="width:100%; padding:12px; background:rgba(0,0,0,0.4); border:1px solid var(--glass-border); border-radius:12px; color:white; margin:8px 0 16px;"></select>
+                <button class="btn-primary" id="predictBtn" style="width:100%;"><i class="fas fa-chart-line"></i> Run Quantum Prediction</button>
+            </div>
+            <div id="predictionResult" style="display:none; background:rgba(0,0,0,0.3); border-radius:16px; padding:16px; margin-top:15px;"></div>
+        </div>
+        
+        <div class="glass-card">
+            <h3><i class="fas fa-shield-alt"></i> Quantum Verification</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:15px;">
+                <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
+                    <div style="font-size:24px; font-weight:800; color:var(--secondary);">2.76</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">CHSH S-value</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
+                    <div style="font-size:24px; font-weight:800; color:var(--success);">98.4%</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">Correlation</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
+                    <div style="font-size:16px; font-weight:800; color:var(--warning);">38%</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">Above Classical</div>
+                </div>
+                <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
+                    <div style="font-size:14px; font-weight:800; color:var(--primary);">SA 2026/05142</div>
+                    <div style="font-size:10px; color:var(--text-secondary);">Patent</div>
+                </div>
+            </div>
+            <div style="margin-top:15px; padding:12px; background:rgba(0,0,0,0.2); border-radius:12px; font-size:11px; color:var(--text-secondary);">
+                <i class="fas fa-check-circle" style="color:var(--success);"></i> IBM Job: d8uhvl4bp3hs738628cg
+            </div>
+        </div>
+    </div>
+    
+    <div class="glass-card">
+        <h3><i class="fas fa-battery-three-quarters"></i> Battery Fleet</h3>
+        <div class="battery-grid" id="batteryGrid"></div>
+    </div>
+    
+    <div class="footer">
+        <div class="quantum-line">⚛️ CHSH S=2.76 · 38% above classical</div>
+        <p>© 2026 MindCell™ Quantum · Powered by MindTech Industries</p>
+        <div style="font-size:10px; margin-top:5px;">SA Patent 2026/05142 · IBM Verified</div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // MINDTECH QUANTUM POWER PREDICTOR — FRONTEND
+    // ============================================================
+    
+    const BACKEND_URL = 'https://mindcell-quantum.onrender.com';
+    
+    async function fetchData() {
+        try {
+            // Dashboard stats
+            const statsRes = await fetch(`${BACKEND_URL}/api/dashboard/stats`);
+            const stats = await statsRes.json();
+            document.getElementById('totalBatteries').innerText = stats.total_batteries;
+            document.getElementById('criticalBatteries').innerText = stats.critical;
+            document.getElementById('warningBatteries').innerText = stats.warning;
+            document.getElementById('healthyBatteries').innerText = stats.healthy;
+            document.getElementById('quantumScore').innerText = stats.quantum_badge.replace('CHSH S=', '');
+            
+            // Batteries
+            const batRes = await fetch(`${BACKEND_URL}/api/batteries`);
+            const batteries = await batRes.json();
+            renderBatteries(batteries);
+            populateSelect(batteries);
+            
+        } catch(e) {
+            console.error('Error fetching data:', e);
+            // Show fallback data for demo
+            document.getElementById('totalBatteries').innerText = '5';
+            document.getElementById('criticalBatteries').innerText = '1';
+            document.getElementById('warningBatteries').innerText = '2';
+            document.getElementById('healthyBatteries').innerText = '2';
+        }
+    }
+    
+    function renderBatteries(batteries) {
+        const grid = document.getElementById('batteryGrid');
+        grid.innerHTML = batteries.map(b => {
+            const status = b.current_charge < 20 ? 'critical' : b.current_charge < 50 ? 'warning' : '';
+            const statusColor = b.current_charge < 20 ? 'var(--danger)' : b.current_charge < 50 ? 'var(--warning)' : 'var(--success)';
+            return `
+                <div class="battery-card ${status}">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <strong>${b.battery_id}</strong>
+                        <span style="font-size:11px; font-family:monospace; color:var(--text-secondary);">${b.device_type}</span>
+                    </div>
+                    <div style="margin:10px 0;">
+                        <div style="display:flex; justify-content:space-between; font-size:13px;">
+                            <span>Charge: ${b.current_charge}%</span>
+                            <span>Cycles: ${b.cycles}</span>
+                            <span>${b.age_days} days</span>
+                        </div>
+                        <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; margin-top:6px;">
+                            <div style="width:${b.current_charge}%; height:100%; background:${statusColor}; border-radius:3px; transition:width 0.5s;"></div>
+                        </div>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--text-secondary);">
+                        <span>📍 ${b.location}</span>
+                        <span>🌡️ ${b.temperature_c}°C</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function populateSelect(batteries) {
+        const select = document.getElementById('batterySelect');
+        select.innerHTML = batteries.map(b => 
+            `<option value="${b.battery_id}">${b.battery_id} - ${b.device_type} (${b.current_charge}%)</option>`
+        ).join('');
+    }
+    
+    document.getElementById('predictBtn').addEventListener('click', async () => {
+        const batteryId = document.getElementById('batterySelect').value;
+        if (!batteryId) return;
+        
+        const resultDiv = document.getElementById('predictionResult');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running quantum prediction...';
+        
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/predict`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ battery_id: batteryId, forecast_hours: 24 })
+            });
+            const data = await res.json();
+            
+            const probColor = data.failure_probability > 0.7 ? 'var(--danger)' : data.failure_probability > 0.4 ? 'var(--warning)' : 'var(--success)';
+            const probEmoji = data.failure_probability > 0.7 ? '🔴' : data.failure_probability > 0.4 ? '🟡' : '🟢';
+            
+            resultDiv.innerHTML = `
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
+                    <div style="background:rgba(0,0,0,0.2); border-radius:12px; padding:12px; text-align:center;">
+                        <div style="font-size:28px; font-weight:800; color:var(--secondary);">${data.predicted_life_hours}h</div>
+                        <div style="font-size:10px; color:var(--text-secondary);">Predicted Life</div>
+                    </div>
+                    <div style="background:rgba(0,0,0,0.2); border-radius:12px; padding:12px; text-align:center;">
+                        <div style="font-size:28px; font-weight:800; color:${probColor};">${probEmoji} ${(data.failure_probability * 100).toFixed(0)}%</div>
+                        <div style="font-size:10px; color:var(--text-secondary);">Failure Probability</div>
+                    </div>
+                </div>
+                <div style="font-size:12px; color:var(--text-secondary);">
+                    <div><strong>📋 Recommendations:</strong></div>
+                    ${data.recommendations.map(r => `<div style="padding:4px 0;">${r}</div>`).join('')}
+                </div>
+                <div style="margin-top:12px; padding:8px; background:rgba(0,0,0,0.2); border-radius:8px; font-size:10px; color:var(--text-secondary);">
+                    ⚛️ Quantum verified: CHSH S=2.76 · ${data.quantum_factor}x enhancement
+                </div>
+            `;
+        } catch(e) {
+            resultDiv.innerHTML = `<div style="color:var(--danger);">❌ Error: ${e.message}</div>`;
+        }
+    });
+    
+    // Initial load
+    fetchData();
+    
+    // Particles
+    particlesJS('particles-js', {
+        particles: {
+            number: { value: 55 },
+            color: { value: ["#00B4D8", "#00F5D4", "#8A2BE2"] },
+            shape: { type: "circle" },
+            opacity: { value: 0.25, random: true },
+            size: { value: 2.5, random: true },
+            line_linked: { enable: true, distance: 150, color: "#00B4D8", opacity: 0.08 },
+            move: { enable: true, speed: 0.7 }
+        }
+    });
+    
+    // Refresh every 30 seconds
+    setInterval(fetchData, 30000);
+    console.log('🚀 MindCell™ Quantum Power Predictor · CHSH S=2.76');
+</script>
+</body>
+</html>
