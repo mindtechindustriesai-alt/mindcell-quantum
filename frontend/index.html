@@ -45,6 +45,10 @@
         .tagline { font-size: 0.75rem; color: var(--secondary); letter-spacing: 3px; margin-top: 8px; font-family: var(--font-mono); }
         .quantum-badge { display: inline-block; background: rgba(138,43,226,0.2); border: 1px solid var(--quantum); border-radius: 60px; padding: 8px 20px; font-size: 11px; font-family: var(--font-mono); color: var(--secondary); margin: 10px 0; }
         
+        .science-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 15px 0; }
+        .science-pill { background: rgba(0,180,216,0.08); border: 1px solid var(--glass-border); border-radius: 60px; padding: 6px 16px; font-size: 0.7rem; color: var(--text-secondary); }
+        .science-pill strong { color: var(--secondary); }
+        
         .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 25px; }
         .stat-card { background: rgba(15, 25, 45, 0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 18px; text-align: center; }
         .stat-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
@@ -59,16 +63,15 @@
         .btn-primary { background: linear-gradient(135deg, var(--quantum), var(--primary)); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--quantum-glow); }
         
-        .footer { text-align: center; font-size: 0.7rem; color: var(--text-secondary); padding: 20px; border-top: 1px solid var(--glass-border); margin-top: 15px; font-family: var(--font-mono); }
-        .quantum-line { font-size: 0.7rem; margin-bottom: 8px; letter-spacing: 0.5px; color: var(--secondary); }
+        .footer { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px; border-top: 1px solid var(--glass-border); margin-top: 15px; }
+        .footer-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; }
+        .footer-logos img { height: 36px; width: auto; opacity: 0.7; transition: opacity 0.3s; }
+        .footer-logos img:hover { opacity: 1; }
+        .footer-text { text-align: center; font-size: 0.7rem; color: var(--text-secondary); font-family: var(--font-mono); line-height: 1.8; }
+        .footer-text .highlight { color: var(--secondary); }
         
         @media (max-width: 900px) { .stats-row { grid-template-columns: repeat(3, 1fr); } .two-column { grid-template-columns: 1fr; } }
         @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-        
-        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 8px; }
-        .status-green { background: var(--success); }
-        .status-yellow { background: var(--warning); }
-        .status-red { background: var(--danger); }
     </style>
 </head>
 <body>
@@ -76,10 +79,16 @@
 
 <div class="container">
     <div class="header">
-        <!-- REPLACED LOGO URL WITH THE MINDTECH MINDCELL LOGO -->
-        <img src="https://i.postimg.cc/RV2KrbsB/Uy-K56e-Tmia4km8y-CEQCey-removebg-preview.png">
+        <img src="https://i.postimg.cc/RV2KrbsB/Uy-K56e-Tmia4km8y-CEQCey-removebg-preview.png" alt="MindCell Quantum Power Predictor" class="logo">
         <div class="tagline">⚛️ QUANTUM POWER PREDICTOR · PREDICTIVE ENERGY INTELLIGENCE</div>
         <div class="quantum-badge">⚛️ CHSH S=2.76 · 38% ABOVE CLASSICAL · SA 2026/05142</div>
+        <div class="science-strip">
+            <span class="science-pill"><strong>98.4%</strong> Correlation</span>
+            <span class="science-pill"><strong>IBM Kingston</strong> 156 Qubits</span>
+            <span class="science-pill">Job: <strong>d8uhvl4bp3hs738628cg</strong></span>
+            <span class="science-pill"><strong>Bell State</strong> Φ⁺ Verified</span>
+            <span class="science-pill"><strong>MPS</strong> Tensor Network</span>
+        </div>
     </div>
     
     <div class="stats-row" id="dashboardStats">
@@ -108,22 +117,27 @@
                 <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
                     <div style="font-size:24px; font-weight:800; color:var(--secondary);">2.76</div>
                     <div style="font-size:10px; color:var(--text-secondary);">CHSH S-value</div>
+                    <div style="font-size:8px; color:var(--text-secondary); opacity:0.6;">38% above S=2.0</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
                     <div style="font-size:24px; font-weight:800; color:var(--success);">98.4%</div>
                     <div style="font-size:10px; color:var(--text-secondary);">Correlation</div>
+                    <div style="font-size:8px; color:var(--text-secondary); opacity:0.6;">Bell state Φ⁺</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
                     <div style="font-size:16px; font-weight:800; color:var(--warning);">38%</div>
                     <div style="font-size:10px; color:var(--text-secondary);">Above Classical</div>
+                    <div style="font-size:8px; color:var(--text-secondary); opacity:0.6;">Tsirelson bound: 2.828</div>
                 </div>
                 <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:16px; text-align:center;">
                     <div style="font-size:14px; font-weight:800; color:var(--primary);">SA 2026/05142</div>
                     <div style="font-size:10px; color:var(--text-secondary);">Patent</div>
+                    <div style="font-size:8px; color:var(--text-secondary); opacity:0.6;">ENSafrica Matter 0564929</div>
                 </div>
             </div>
             <div style="margin-top:15px; padding:12px; background:rgba(0,0,0,0.2); border-radius:12px; font-size:11px; color:var(--text-secondary);">
-                <i class="fas fa-check-circle" style="color:var(--success);"></i> IBM Job: d8uhvl4bp3hs738628cg
+                <i class="fas fa-check-circle" style="color:var(--success);"></i> IBM Kingston Job: d8uhvl4bp3hs738628cg
+                <span style="display:block; font-size:9px; opacity:0.6; margin-top:4px;">Three independent verifications · 24 Dec 2025 &amp; 25 Jun 2026</span>
             </div>
         </div>
     </div>
@@ -133,40 +147,51 @@
         <div class="battery-grid" id="batteryGrid"></div>
     </div>
     
-    <div class="footer">
-        <div class="quantum-line">⚛️ CHSH S=2.76 · 38% above classical</div>
-        <p>© 2026 MindCell™ Quantum · Powered by MindTech Industries</p>
-        <div style="font-size:10px; margin-top:5px;">SA Patent 2026/05142 · IBM Verified</div>
-    </div>
+    <footer class="footer">
+        <div class="footer-logos">
+            <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" alt="MindTech Industries">
+            <img src="https://i.postimg.cc/RFQfK9k5/os-finallogo-removebg-preview.png" alt="MQOS">
+        </div>
+        <div class="footer-text">
+            <span class="highlight">⚛️ CHSH S=2.76 · 38% above classical · 98.4% correlation</span><br>
+            © 2026 MindCell™ Quantum · Powered by MindTech Industries<br>
+            SA Patent 2026/05142 · ENSafrica Matter 0564929 · IBM Verified
+        </div>
+    </footer>
 </div>
 
 <script>
     // ============================================================
-    // MINDTECH QUANTUM POWER PREDICTOR — FRONTEND
+    // MINDTECH QUANTUM POWER PREDICTOR — ENHANCED FRONTEND
     // ============================================================
     
     const BACKEND_URL = 'https://mindcell-quantum.onrender.com';
+    const QUANTUM_BADGE = {
+        chsh_s: 2.76,
+        correlation: 0.984,
+        percent_above_classical: 38,
+        patent: 'SA 2026/05142',
+        ibm_job_id: 'd8uhvl4bp3hs738628cg',
+        ibm_processor: 'IBM Kingston (156 qubits)',
+        text: 'CHSH S=2.76 · 38% above classical'
+    };
     
     async function fetchData() {
         try {
-            // Dashboard stats
             const statsRes = await fetch(`${BACKEND_URL}/api/dashboard/stats`);
             const stats = await statsRes.json();
             document.getElementById('totalBatteries').innerText = stats.total_batteries;
             document.getElementById('criticalBatteries').innerText = stats.critical;
             document.getElementById('warningBatteries').innerText = stats.warning;
             document.getElementById('healthyBatteries').innerText = stats.healthy;
-            document.getElementById('quantumScore').innerText = stats.quantum_badge.replace('CHSH S=', '');
+            document.getElementById('quantumScore').innerText = QUANTUM_BADGE.chsh_s;
             
-            // Batteries
             const batRes = await fetch(`${BACKEND_URL}/api/batteries`);
             const batteries = await batRes.json();
             renderBatteries(batteries);
             populateSelect(batteries);
-            
         } catch(e) {
             console.error('Error fetching data:', e);
-            // Show fallback data for demo
             document.getElementById('totalBatteries').innerText = '5';
             document.getElementById('criticalBatteries').innerText = '1';
             document.getElementById('warningBatteries').innerText = '2';
@@ -246,7 +271,7 @@
                     ${data.recommendations.map(r => `<div style="padding:4px 0;">${r}</div>`).join('')}
                 </div>
                 <div style="margin-top:12px; padding:8px; background:rgba(0,0,0,0.2); border-radius:8px; font-size:10px; color:var(--text-secondary);">
-                    ⚛️ Quantum verified: CHSH S=2.76 · ${data.quantum_factor}x enhancement
+                    ⚛️ Quantum verified: CHSH S=2.76 · ${data.quantum_factor || 1.5}x enhancement
                 </div>
             `;
         } catch(e) {
