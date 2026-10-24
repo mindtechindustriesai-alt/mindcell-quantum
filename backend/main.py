@@ -287,6 +287,46 @@ async def dashboard_stats():
     }
 
 # ============================================================
+# ENTANGLEGUARD INTEGRATION — CHSH HANDSHAKE
+# ============================================================
+@app.get("/api/v1/verify/chsh")
+async def verify_chsh():
+    """
+    Deterministic Quantum Trust Handshake endpoint for EntangleGuard SDK.
+    Returns the immutable IBM Kingston attestation.
+    """
+    return {
+        "S": QUANTUM_BADGE["chsh_s"],
+        "backend": "ibm_kingston",
+        "job_id": QUANTUM_BADGE["ibm_job_id"],
+        "status": "CONFIRMED",
+        "patent": QUANTUM_BADGE["patent"],
+        "hardware_verified": True,
+        "quantum_max": QUANTUM_BADGE["quantum_max"],
+        "classical_limit": QUANTUM_BADGE["classical_limit"],
+        "app": "mindcell-quantum",
+        "timestamp": datetime.now().isoformat()
+    }
+
+# ============================================================
+# MQOS APP STATUS — HEALTH CHECK FOR DASHBOARD
+# ============================================================
+@app.get("/api/v1/apps/mindcell/status")
+async def app_status():
+    """
+    Health check endpoint for the MQOS Tererai dashboard.
+    """
+    return {
+        "app": "mindcell-quantum",
+        "status": "operational",
+        "version": "2.0.0",
+        "quantum_badge": f"CHSH S={QUANTUM_BADGE['chsh_s']:.2f}",
+        "patent": QUANTUM_BADGE["patent"],
+        "ibm_job_id": QUANTUM_BADGE["ibm_job_id"],
+        "timestamp": datetime.now().isoformat()
+    }
+
+# ============================================================
 # RUN
 # ============================================================
 if __name__ == "__main__":
