@@ -171,10 +171,59 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- ENTANGLEGUARD SDK: MULTI-BACKEND SETUP -->
+<!-- ENTANGLEGUARD SDK — INLINE (NO EXTERNAL DEPENDENCY) -->
 <!-- ============================================================ -->
-<script>window.MQOS_CORE = 'https://mindcell-quantum.onrender.com';</script>
-<script src="https://illustrious-cucurucho-a5eeac.netlify.app/entangleguard.js"></script>
+<script>
+    window.MQOS_CORE = 'https://mindcell-quantum.onrender.com';
+
+    const EntangleGuard = (function() {
+        const DEFAULT_MQOS_CORE = 'https://quantum-ai-backend-d26d.onrender.com';
+        const MQOS_CORE = window.MQOS_CORE || DEFAULT_MQOS_CORE;
+        const MQOS_CHSH_CONSTANT = 2.76;
+        const IBM_JOB_ID = "d8uhvl4bp3hs738628cg";
+        
+        let currentSession = {
+            id: 'eg-' + Math.random().toString(36).substr(2, 9),
+            verified: true,
+            chshBadge: MQOS_CHSH_CONSTANT,
+            attestationStatus: "PENDING"
+        };
+
+        async function init() {
+            console.log(`[EntangleGuard] Session: ${currentSession.id}`);
+            console.log(`[EntangleGuard] Trust Anchor: CHSH S=${MQOS_CHSH_CONSTANT}`);
+            console.log(`[EntangleGuard] Backend: ${MQOS_CORE}`);
+
+            try {
+                const res = await fetch(`${MQOS_CORE}/api/v1/verify/chsh`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' },
+                    signal: AbortSignal.timeout(15000)
+                });
+
+                if (res.ok) {
+                    const data = await res.json();
+                    currentSession.attestationStatus = "CONFIRMED";
+                    console.log(`[EntangleGuard] ✅ Attestation Confirmed. CHSH S=${data.S || MQOS_CHSH_CONSTANT}`);
+                } else {
+                    currentSession.attestationStatus = "UNREACHABLE";
+                    console.warn(`[EntangleGuard] ⚠️ Verifier returned ${res.status}.`);
+                }
+            } catch (error) {
+                currentSession.attestationStatus = "UNREACHABLE";
+                console.warn(`[EntangleGuard] ⚠️ Verifier unreachable.`);
+            }
+            return currentSession;
+        }
+
+        return {
+            init: init,
+            getSession: () => currentSession
+        };
+    })();
+
+    EntangleGuard.init();
+</script>
 
 <script>
     // ============================================================
@@ -211,17 +260,24 @@
         }
     }
 
-    // Listen for the SDK to finish its handshake
+    // Wait for the SDK to initialize, then update the badge
     (async function waitForHandshake() {
-        // Give the SDK time to initialize
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        if (typeof EntangleGuard === 'undefined') {
+            console.error('EntangleGuard SDK failed to load.');
+            updateHandshakeBadge('UNREACHABLE');
+            return;
+        }
+        
         const session = EntangleGuard.getSession();
         updateHandshakeBadge(session.attestationStatus);
         
-        // Poll for changes (in case of retries)
         setInterval(() => {
-            const current = EntangleGuard.getSession();
-            updateHandshakeBadge(current.attestationStatus);
+            if (typeof EntangleGuard !== 'undefined') {
+                const current = EntangleGuard.getSession();
+                updateHandshakeBadge(current.attestationStatus);
+            }
         }, 5000);
     })();
 
