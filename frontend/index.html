@@ -87,7 +87,6 @@
         <div class="tagline">⚛️ QUANTUM POWER PREDICTOR · PREDICTIVE ENERGY INTELLIGENCE</div>
         <div class="quantum-badge">⚛️ CHSH S=2.76 · 38% ABOVE CLASSICAL · SA 2026/05142</div>
         
-        <!-- LIVE HANDSHAKE BADGE -->
         <div style="margin: 10px 0;">
             <span id="handshakeBadge" class="handshake-badge"><i class="fas fa-satellite-dish"></i> Handshake: Pending...</span>
         </div>
@@ -170,15 +169,27 @@
     </footer>
 </div>
 
-<!-- ============================================================ -->
-<!-- ENTANGLEGUARD SDK — INLINE (NO EXTERNAL DEPENDENCY) -->
-<!-- ============================================================ -->
 <script>
-    window.MQOS_CORE = 'https://mindcell-quantum.onrender.com';
+    // ============================================================
+    // MINDTECH QUANTUM POWER PREDICTOR — ENHANCED FRONTEND
+    // ============================================================
+    
+    const BACKEND_URL = 'https://mindcell-quantum.onrender.com';
+    const QUANTUM_BADGE = {
+        chsh_s: 2.76,
+        correlation: 0.984,
+        percent_above_classical: 38,
+        patent: 'SA 2026/05142',
+        ibm_job_id: 'd8uhvl4bp3hs738628cg',
+        ibm_processor: 'IBM Kingston (156 qubits)',
+        text: 'CHSH S=2.76 · 38% above classical'
+    };
 
-    const EntangleGuard = (function() {
-        const DEFAULT_MQOS_CORE = 'https://quantum-ai-backend-d26d.onrender.com';
-        const MQOS_CORE = window.MQOS_CORE || DEFAULT_MQOS_CORE;
+    // ============================================================
+    // ENTANGLEGUARD SDK — INLINE, ATTACHED TO WINDOW
+    // ============================================================
+    (function() {
+        const MQOS_CORE = BACKEND_URL;
         const MQOS_CHSH_CONSTANT = 2.76;
         const IBM_JOB_ID = "d8uhvl4bp3hs738628cg";
         
@@ -216,33 +227,18 @@
             return currentSession;
         }
 
-        return {
+        // Attach to window explicitly
+        window.EntangleGuard = {
             init: init,
             getSession: () => currentSession
         };
+
+        // Auto-initialize
+        window.EntangleGuard.init();
     })();
 
-    EntangleGuard.init();
-</script>
-
-<script>
     // ============================================================
-    // MINDTECH QUANTUM POWER PREDICTOR — ENHANCED FRONTEND
-    // ============================================================
-    
-    const BACKEND_URL = 'https://mindcell-quantum.onrender.com';
-    const QUANTUM_BADGE = {
-        chsh_s: 2.76,
-        correlation: 0.984,
-        percent_above_classical: 38,
-        patent: 'SA 2026/05142',
-        ibm_job_id: 'd8uhvl4bp3hs738628cg',
-        ibm_processor: 'IBM Kingston (156 qubits)',
-        text: 'CHSH S=2.76 · 38% above classical'
-    };
-
-    // ============================================================
-    // ENTANGLEGUARD HANDSHAKE UI
+    // HANDSHAKE BADGE UI
     // ============================================================
     function updateHandshakeBadge(status) {
         const badge = document.getElementById('handshakeBadge');
@@ -264,18 +260,18 @@
     (async function waitForHandshake() {
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        if (typeof EntangleGuard === 'undefined') {
+        if (typeof window.EntangleGuard === 'undefined') {
             console.error('EntangleGuard SDK failed to load.');
             updateHandshakeBadge('UNREACHABLE');
             return;
         }
         
-        const session = EntangleGuard.getSession();
+        const session = window.EntangleGuard.getSession();
         updateHandshakeBadge(session.attestationStatus);
         
         setInterval(() => {
-            if (typeof EntangleGuard !== 'undefined') {
-                const current = EntangleGuard.getSession();
+            if (typeof window.EntangleGuard !== 'undefined') {
+                const current = window.EntangleGuard.getSession();
                 updateHandshakeBadge(current.attestationStatus);
             }
         }, 5000);
