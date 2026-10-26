@@ -7,6 +7,7 @@ import os
 import json
 import numpy as np
 import random
+import httpx
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 from fastapi import FastAPI, HTTPException, Depends, Request
@@ -48,6 +49,8 @@ QUANTUM_BADGE = {
     "ibm_job_id": "d8uhvl4bp3hs738628cg",
     "correlation": 0.984
 }
+
+LUVUNO_URL = "https://luvuno-backend-proxy.onrender.com"
 
 # ============================================================
 # DATA MODELS
@@ -194,7 +197,6 @@ async def predict_power(request: PredictionRequest):
     Predict battery life and failure probability.
     Enhanced by quantum verification (CHSH S=2.76).
     """
-    # Find battery
     battery = None
     for b in BATTERY_DATABASE:
         if b['battery_id'] == request.battery_id:
@@ -204,10 +206,8 @@ async def predict_power(request: PredictionRequest):
     if not battery:
         raise HTTPException(status_code=404, detail="Battery not found")
     
-    # Run quantum-enhanced prediction
     result = QuantumSimulator.predict_battery_life(battery)
     
-    # Generate recommendations
     recommendations = []
     if result['failure_probability'] > 0.7:
         recommendations.append("⚠️ CRITICAL: Battery failure imminent. Schedule replacement.")
@@ -223,7 +223,6 @@ async def predict_power(request: PredictionRequest):
     if battery['cycles'] > 800:
         recommendations.append("🔄 CYCLES: Battery approaching end of design life.")
     
-    # Next service time
     if result['predicted_hours'] < 24:
         service_hours = max(1, int(result['predicted_hours'] * 0.5))
     else:
@@ -285,6 +284,30 @@ async def dashboard_stats():
             "Battery BT-004: 12% charge, 1024 cycles 🔴"
         ]
     }
+
+# ============================================================
+# LUVUNO AI CHAT PROXY
+# ============================================================
+@app.post("/api/chat")
+async def chat_proxy(request: Request):
+    """
+    Proxy chat requests to Luvuno backend.
+    """
+    try:
+        body = await request.json()
+        async with httpx.AsyncClient() as client:
+            res = await client.post(
+                f"{LUVUNO_URL}/api/chat",
+                json=body,
+                timeout=30.0
+            )
+            return res.json()
+    except Exception as e:
+        return {
+            "error": str(e),
+            "response": "AI assistant is temporarily unavailable. Please try again.",
+            "portal": "mindcell"
+        }
 
 # ============================================================
 # ENTANGLEGUARD INTEGRATION — CHSH HANDSHAKE
