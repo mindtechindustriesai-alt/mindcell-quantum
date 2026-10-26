@@ -4,76 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>MindCell™ Quantum Power Predictor</title>
-    
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔋</text></svg>">
+
     <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         :root {
-            --primary: #00B4D8;
-            --primary-dark: #0096C7;
-            --primary-glow: rgba(0,180,216,0.4);
-            --secondary: #00F5D4;
-            --quantum: #8A2BE2;
-            --quantum-glow: rgba(138,43,226,0.5);
-            --success: #00FF88;
-            --danger: #EF476F;
-            --warning: #FFD166;
-            --dark-bg: #05080F;
-            --dark-card: #0A0F1A;
+            --primary: #00B4D8; --primary-dark: #0096C7; --primary-glow: rgba(0,180,216,0.4);
+            --secondary: #00F5D4; --quantum: #8A2BE2; --quantum-glow: rgba(138,43,226,0.5);
+            --success: #00FF88; --danger: #EF476F; --warning: #FFD166;
+            --dark-bg: #05080F; --dark-card: #0A0F1A;
             --glass-border: rgba(0,180,216,0.2);
-            --text-primary: #E8EDF5;
-            --text-secondary: #8A99B0;
-            --font-exo: 'Exo 2', sans-serif;
-            --font-mono: 'Space Mono', monospace;
+            --text-primary: #E8EDF5; --text-secondary: #8A99B0;
+            --font-exo: 'Exo 2', sans-serif; --font-mono: 'Space Mono', monospace;
         }
-        
         body { font-family: var(--font-exo); background: var(--dark-bg); color: var(--text-primary); min-height: 100vh; overflow-x: hidden; position: relative; }
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .container { max-width: 1300px; margin: 0 auto; padding: 20px; position: relative; z-index: 1; }
-        
+
         .glass-card { background: rgba(15, 25, 45, 0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 28px; padding: 24px; margin-bottom: 24px; transition: all 0.3s; }
         .glass-card:hover { border-color: var(--primary); transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,180,216,0.15); }
-        
+
         .header { text-align: center; padding: 20px 0; }
         .logo { max-width: 280px; width: 100%; filter: drop-shadow(0 0 20px #00B4D8); animation: float 4s ease-in-out infinite; }
         @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
         .tagline { font-size: 0.75rem; color: var(--secondary); letter-spacing: 3px; margin-top: 8px; font-family: var(--font-mono); }
         .quantum-badge { display: inline-block; background: rgba(138,43,226,0.2); border: 1px solid var(--quantum); border-radius: 60px; padding: 8px 20px; font-size: 11px; font-family: var(--font-mono); color: var(--secondary); margin: 10px 0; }
-        
+
         .science-strip { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 15px 0; }
         .science-pill { background: rgba(0,180,216,0.08); border: 1px solid var(--glass-border); border-radius: 60px; padding: 6px 16px; font-size: 0.7rem; color: var(--text-secondary); }
         .science-pill strong { color: var(--secondary); }
-        
+
         .stats-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; margin-bottom: 25px; }
         .stat-card { background: rgba(15, 25, 45, 0.45); backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-radius: 24px; padding: 18px; text-align: center; }
         .stat-value { font-size: 1.8rem; font-weight: 800; background: linear-gradient(135deg, var(--secondary), var(--primary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
         .stat-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 5px; font-family: var(--font-mono); }
-        
+
         .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         .battery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
         .battery-card { background: rgba(0,0,0,0.3); border-radius: 16px; padding: 16px; border-left: 3px solid var(--success); }
         .battery-card.critical { border-left-color: var(--danger); }
         .battery-card.warning { border-left-color: var(--warning); }
-        
+
         .btn-primary { background: linear-gradient(135deg, var(--quantum), var(--primary)); border: none; padding: 12px 24px; border-radius: 40px; color: white; font-weight: 600; cursor: pointer; transition: all 0.2s; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px var(--quantum-glow); }
-        
+
         .footer { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px; border-top: 1px solid var(--glass-border); margin-top: 15px; }
         .footer-logos { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 30px; }
         .footer-logos img { height: 36px; width: auto; opacity: 0.7; transition: opacity 0.3s; }
         .footer-logos img:hover { opacity: 1; }
         .footer-text { text-align: center; font-size: 0.7rem; color: var(--text-secondary); font-family: var(--font-mono); line-height: 1.8; }
         .footer-text .highlight { color: var(--secondary); }
-        
+
         .handshake-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 30px; font-size: 0.7rem; font-family: var(--font-mono); border: 1px solid var(--warning); color: var(--warning); background: rgba(255, 209, 102, 0.1); transition: all 0.3s; }
         .handshake-badge.confirmed { border-color: var(--success); color: var(--success); background: rgba(0, 255, 136, 0.1); }
         .handshake-badge.unreachable { border-color: var(--danger); color: var(--danger); background: rgba(239, 71, 111, 0.1); }
-        
+
+        /* CHAT STYLES */
+        .chat-messages { height: 250px; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 16px; padding: 15px; margin-bottom: 12px; }
+        .chat-message { padding: 10px 14px; margin-bottom: 10px; border-radius: 18px; max-width: 85%; font-size: 0.9rem; line-height: 1.5; }
+        .chat-message.user { background: var(--primary); margin-left: auto; text-align: right; }
+        .chat-message.ai { background: rgba(255,255,255,0.08); border-left: 2px solid var(--secondary); }
+        .chat-input-group { display: flex; gap: 10px; align-items: center; }
+        .chat-input { flex: 1; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); border-radius: 60px; color: white; font-family: var(--font-exo); }
+        .chat-send { background: var(--primary); border: none; border-radius: 60px; padding: 12px 24px; color: white; cursor: pointer; font-weight: 600; }
+        .status-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; }
+        .status-dot.online { background: var(--success); box-shadow: 0 0 10px var(--success); }
+        .status-dot.offline { background: var(--danger); box-shadow: 0 0 10px var(--danger); }
+        .status-dot.loading { background: var(--warning); box-shadow: 0 0 10px var(--warning); animation: pulse 1s infinite; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
         @media (max-width: 900px) { .stats-row { grid-template-columns: repeat(3, 1fr); } .two-column { grid-template-columns: 1fr; } }
         @media (max-width: 600px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
     </style>
@@ -86,11 +91,11 @@
         <img src="https://i.postimg.cc/RV2KrbsB/Uy-K56e-Tmia4km8y-CEQCey-removebg-preview.png" alt="MindCell Quantum Power Predictor" class="logo">
         <div class="tagline">⚛️ QUANTUM POWER PREDICTOR · PREDICTIVE ENERGY INTELLIGENCE</div>
         <div class="quantum-badge">⚛️ CHSH S=2.76 · 38% ABOVE CLASSICAL · SA 2026/05142</div>
-        
+
         <div style="margin: 10px 0;">
             <span id="handshakeBadge" class="handshake-badge"><i class="fas fa-satellite-dish"></i> Handshake: Pending...</span>
         </div>
-        
+
         <div class="science-strip">
             <span class="science-pill"><strong>98.4%</strong> Correlation</span>
             <span class="science-pill"><strong>IBM Kingston</strong> 156 Qubits</span>
@@ -99,7 +104,7 @@
             <span class="science-pill"><strong>MPS</strong> Tensor Network</span>
         </div>
     </div>
-    
+
     <div class="stats-row" id="dashboardStats">
         <div class="stat-card"><div class="stat-value" id="totalBatteries">0</div><div class="stat-label">Total Batteries</div></div>
         <div class="stat-card"><div class="stat-value" id="criticalBatteries">0</div><div class="stat-label">Critical</div></div>
@@ -107,7 +112,7 @@
         <div class="stat-card"><div class="stat-value" id="healthyBatteries">0</div><div class="stat-label">Healthy</div></div>
         <div class="stat-card"><div class="stat-value" id="quantumScore">2.76</div><div class="stat-label">CHSH S-value</div></div>
     </div>
-    
+
     <div class="two-column">
         <div class="glass-card">
             <h3><i class="fas fa-brain"></i> Quantum Prediction</h3>
@@ -119,7 +124,7 @@
             </div>
             <div id="predictionResult" style="display:none; background:rgba(0,0,0,0.3); border-radius:16px; padding:16px; margin-top:15px;"></div>
         </div>
-        
+
         <div class="glass-card">
             <h3><i class="fas fa-shield-alt"></i> Quantum Verification</h3>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:15px;">
@@ -150,12 +155,31 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- AI CHAT ASSISTANT (LUVUNO) -->
+    <div class="glass-card quantum-glow" style="margin-top: 20px;">
+        <div class="card-header" style="display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid var(--glass-border);">
+            <i class="fas fa-robot" style="color: var(--quantum);"></i>
+            <h3>AI Assistant (Luvuno)</h3>
+            <span style="margin-left: auto; font-size: 0.7rem; display: flex; align-items: center;">
+                <span class="status-dot online" id="chatStatusDot"></span>
+                <span id="chatStatusText" style="color: var(--text-secondary);">Online</span>
+            </span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message ai"><strong>Khensani:</strong> Hello! I'm your AI assistant. Ask me anything about battery health, predictions, or energy optimization.</div>
+        </div>
+        <div class="chat-input-group">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Ask about battery health...">
+            <button id="chatSendBtn" class="chat-send" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
     <div class="glass-card">
         <h3><i class="fas fa-battery-three-quarters"></i> Battery Fleet</h3>
         <div class="battery-grid" id="batteryGrid"></div>
     </div>
-    
+
     <footer class="footer">
         <div class="footer-logos">
             <img src="https://i.postimg.cc/zXW78GNH/Mind-Tech-Transparent-Logo.png" alt="MindTech Industries">
@@ -171,28 +195,17 @@
 
 <script>
     // ============================================================
-    // MINDTECH QUANTUM POWER PREDICTOR — ENHANCED FRONTEND
+    // BACKEND CONFIG
     // ============================================================
-    
     const BACKEND_URL = 'https://mindcell-quantum.onrender.com';
-    const QUANTUM_BADGE = {
-        chsh_s: 2.76,
-        correlation: 0.984,
-        percent_above_classical: 38,
-        patent: 'SA 2026/05142',
-        ibm_job_id: 'd8uhvl4bp3hs738628cg',
-        ibm_processor: 'IBM Kingston (156 qubits)',
-        text: 'CHSH S=2.76 · 38% above classical'
-    };
+    const LUVUNO_URL = 'https://luvuno-backend-proxy.onrender.com';
 
     // ============================================================
-    // ENTANGLEGUARD SDK — INLINE, ATTACHED TO WINDOW
+    // ENTANGLEGUARD SDK
     // ============================================================
     (function() {
         const MQOS_CORE = BACKEND_URL;
         const MQOS_CHSH_CONSTANT = 2.76;
-        const IBM_JOB_ID = "d8uhvl4bp3hs738628cg";
-        
         let currentSession = {
             id: 'eg-' + Math.random().toString(36).substr(2, 9),
             verified: true,
@@ -202,48 +215,35 @@
 
         async function init() {
             console.log(`[EntangleGuard] Session: ${currentSession.id}`);
-            console.log(`[EntangleGuard] Trust Anchor: CHSH S=${MQOS_CHSH_CONSTANT}`);
-            console.log(`[EntangleGuard] Backend: ${MQOS_CORE}`);
-
             try {
                 const res = await fetch(`${MQOS_CORE}/api/v1/verify/chsh`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
                     signal: AbortSignal.timeout(15000)
                 });
-
                 if (res.ok) {
                     const data = await res.json();
                     currentSession.attestationStatus = "CONFIRMED";
-                    console.log(`[EntangleGuard] ✅ Attestation Confirmed. CHSH S=${data.S || MQOS_CHSH_CONSTANT}`);
+                    console.log(`[EntangleGuard] ✅ CHSH Confirmed: ${data.S || MQOS_CHSH_CONSTANT}`);
                 } else {
                     currentSession.attestationStatus = "UNREACHABLE";
-                    console.warn(`[EntangleGuard] ⚠️ Verifier returned ${res.status}.`);
                 }
             } catch (error) {
                 currentSession.attestationStatus = "UNREACHABLE";
-                console.warn(`[EntangleGuard] ⚠️ Verifier unreachable.`);
             }
             return currentSession;
         }
 
-        // Attach to window explicitly
-        window.EntangleGuard = {
-            init: init,
-            getSession: () => currentSession
-        };
-
-        // Auto-initialize
+        window.EntangleGuard = { init: init, getSession: () => currentSession };
         window.EntangleGuard.init();
     })();
 
     // ============================================================
-    // HANDSHAKE BADGE UI
+    // HANDSHAKE BADGE
     // ============================================================
     function updateHandshakeBadge(status) {
         const badge = document.getElementById('handshakeBadge');
         if (!badge) return;
-        
         if (status === 'CONFIRMED') {
             badge.className = 'handshake-badge confirmed';
             badge.innerHTML = `<i class="fas fa-check-circle"></i> Handshake: CONFIRMED (S=2.76)`;
@@ -256,23 +256,14 @@
         }
     }
 
-    // Wait for the SDK to initialize, then update the badge
     (async function waitForHandshake() {
         await new Promise(resolve => setTimeout(resolve, 2000));
-        
-        if (typeof window.EntangleGuard === 'undefined') {
-            console.error('EntangleGuard SDK failed to load.');
-            updateHandshakeBadge('UNREACHABLE');
-            return;
-        }
-        
+        if (typeof window.EntangleGuard === 'undefined') { updateHandshakeBadge('UNREACHABLE'); return; }
         const session = window.EntangleGuard.getSession();
         updateHandshakeBadge(session.attestationStatus);
-        
         setInterval(() => {
             if (typeof window.EntangleGuard !== 'undefined') {
-                const current = window.EntangleGuard.getSession();
-                updateHandshakeBadge(current.attestationStatus);
+                updateHandshakeBadge(window.EntangleGuard.getSession().attestationStatus);
             }
         }, 5000);
     })();
@@ -288,21 +279,17 @@
             document.getElementById('criticalBatteries').innerText = stats.critical;
             document.getElementById('warningBatteries').innerText = stats.warning;
             document.getElementById('healthyBatteries').innerText = stats.healthy;
-            document.getElementById('quantumScore').innerText = QUANTUM_BADGE.chsh_s;
-            
+            document.getElementById('quantumScore').innerText = '2.76';
+
             const batRes = await fetch(`${BACKEND_URL}/api/batteries`);
             const batteries = await batRes.json();
             renderBatteries(batteries);
             populateSelect(batteries);
         } catch(e) {
             console.error('Error fetching data:', e);
-            document.getElementById('totalBatteries').innerText = '5';
-            document.getElementById('criticalBatteries').innerText = '1';
-            document.getElementById('warningBatteries').innerText = '2';
-            document.getElementById('healthyBatteries').innerText = '2';
         }
     }
-    
+
     function renderBatteries(batteries) {
         const grid = document.getElementById('batteryGrid');
         grid.innerHTML = batteries.map(b => {
@@ -332,22 +319,21 @@
             `;
         }).join('');
     }
-    
+
     function populateSelect(batteries) {
         const select = document.getElementById('batterySelect');
-        select.innerHTML = batteries.map(b => 
+        select.innerHTML = batteries.map(b =>
             `<option value="${b.battery_id}">${b.battery_id} - ${b.device_type} (${b.current_charge}%)</option>`
         ).join('');
     }
-    
+
     document.getElementById('predictBtn').addEventListener('click', async () => {
         const batteryId = document.getElementById('batterySelect').value;
         if (!batteryId) return;
-        
         const resultDiv = document.getElementById('predictionResult');
         resultDiv.style.display = 'block';
         resultDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running quantum prediction...';
-        
+
         try {
             const res = await fetch(`${BACKEND_URL}/api/predict`, {
                 method: 'POST',
@@ -355,10 +341,9 @@
                 body: JSON.stringify({ battery_id: batteryId, forecast_hours: 24 })
             });
             const data = await res.json();
-            
             const probColor = data.failure_probability > 0.7 ? 'var(--danger)' : data.failure_probability > 0.4 ? 'var(--warning)' : 'var(--success)';
             const probEmoji = data.failure_probability > 0.7 ? '🔴' : data.failure_probability > 0.4 ? '🟡' : '🟢';
-            
+
             resultDiv.innerHTML = `
                 <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:15px;">
                     <div style="background:rgba(0,0,0,0.2); border-radius:12px; padding:12px; text-align:center;">
@@ -382,11 +367,69 @@
             resultDiv.innerHTML = `<div style="color:var(--danger);">❌ Error: ${e.message}</div>`;
         }
     });
-    
-    // Initial load
-    fetchData();
-    
-    // Particles
+
+    // ============================================================
+    // AI CHAT
+    // ============================================================
+    const chatFallbacks = [
+        "That's a great question about battery health. Let me analyze the data.",
+        "I can help with battery predictions. What specific device are you monitoring?",
+        "For energy optimization, I recommend checking the cycle count and temperature.",
+        "Battery degradation is influenced by age, cycles, and temperature. Let's look at your data.",
+        "I'm here to help with predictive energy intelligence. What do you need?"
+    ];
+    let chatFallbackIndex = 0;
+
+    function sendChatMessage() {
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg) return;
+        input.value = '';
+        const messages = document.getElementById('chatMessages');
+        messages.innerHTML += `<div class="chat-message user">${msg}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+
+        const typing = document.createElement('div');
+        typing.className = 'chat-message ai';
+        typing.textContent = 'Thinking...';
+        messages.appendChild(typing);
+        messages.scrollTop = messages.scrollHeight;
+
+        const dot = document.getElementById('chatStatusDot');
+        const statusText = document.getElementById('chatStatusText');
+        if (dot) dot.className = 'status-dot loading';
+        if (statusText) statusText.textContent = 'Thinking...';
+
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msg, portal: 'mindcell' })
+        }).then(r => r.json()).then(data => {
+            typing.remove();
+            if (dot) dot.className = 'status-dot online';
+            if (statusText) statusText.textContent = 'Online';
+            const reply = data.response || data.reply || chatFallbacks[chatFallbackIndex % chatFallbacks.length];
+            chatFallbackIndex++;
+            messages.innerHTML += `<div class="chat-message ai"><strong>Khensani:</strong> ${reply}</div>`;
+            messages.scrollTop = messages.scrollHeight;
+        }).catch(() => {
+            typing.remove();
+            if (dot) dot.className = 'status-dot offline';
+            if (statusText) statusText.textContent = 'Offline';
+            const reply = chatFallbacks[chatFallbackIndex % chatFallbacks.length];
+            chatFallbackIndex++;
+            messages.innerHTML += `<div class="chat-message ai"><strong>Khensani:</strong> ${reply} (Offline mode)</div>`;
+            messages.scrollTop = messages.scrollHeight;
+        });
+    }
+
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+
+    // ============================================================
+    // PARTICLES
+    // ============================================================
     particlesJS('particles-js', {
         particles: {
             number: { value: 55 },
@@ -398,8 +441,9 @@
             move: { enable: true, speed: 0.7 }
         }
     });
-    
-    // Refresh every 30 seconds
+
+    // Initial load
+    fetchData();
     setInterval(fetchData, 30000);
     console.log('🚀 MindCell™ Quantum Power Predictor · CHSH S=2.76');
 </script>
